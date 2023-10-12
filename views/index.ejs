@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo list</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <ul>
+                <li><a href="/today">Today</a></li>
+                <li><a href="/work">Work</a></li>
+            </ul>
+        </div>
+    </div>
+    <section>
+        <% if (locals.today) { %>
+         <h2 name="today">Today's Todo List</h2>
+        <% } else if (locals.work) { %>
+          <h2 name="work">My Work Todo List</h2>
+        <% } %>
+        <div class="main-container">
+            <div class="add">
+                <form method="post" action="/add">
+                    <input name="add" >
+                    <% if(locals.today){ %>
+                    <input type="hidden" name="listName" value="Today's Todo List">
+                    <% } else if(locals.work){ %>
+                    <input type="hidden" name="listName" value="My Work Todo List">
+                    <% } else{ %>
+                    <input type="hidden" name="listName" value="Today's Todo List">
+                    <% } %>
+                    <input class="sub" type="submit">
+                </form>
+            </div>
+            <div class="show-list">
+                <div class="show-list">
+                    <% if (locals.list && locals.list.length > 0) { %>
+                        <% for(let i = 0; i < locals.list.length; i++){ %>
+                        <!-- Loop through and display items if locals.list is defined and not empty -->
+                            <div class="box one">
+                                <form action="/delete" method="post">
+                                    <input type="hidden" name="listName" value="Today's Todo List">
+                                    <input type="checkbox" name="itemId" value="<%= locals.list[i]._id %>" onchange="this.form.submit()">
+                                    <label id="text<%= i %>"> <%= locals.list[i].name %> </label>
+                                </form>
+                            </div>
+                        <% } %>
+                    <% } else { %>
+                        <div class="box one">
+                            <form>
+                                <p> currently there is no todo list</p>
+                            </form>
+                        </div>
+                        <!-- Handle the case where locals.list is undefined or empty -->
+                    <% } %>
+                </div>
+                
+            </div>
+            
+        </div>
+
+    </section>
+
+</body>
+</html>
